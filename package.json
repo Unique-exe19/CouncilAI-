@@ -1,6 +1,17 @@
 {
   "name": "council-ai",
   "version": "0.1.0",
+  "description": "CouncilAI — AI for Legal Assistance & Access: Multi-Agent Legal & Executive Decision Boardroom Simulator",
+  "keywords": [
+    "ai-for-legal-assistance-and-access",
+    "legal-ai",
+    "legal-assistance",
+    "legal-access",
+    "legal-compliance",
+    "regulatory-ai",
+    "legal-decision-support",
+    "council-ai"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",
