@@ -1,69 +1,61 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import React from "react";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Sparkles, Bot, Code2 } from "lucide-react";
+import { Hero } from "@/components/landing/Hero";
+import { ExampleChips } from "@/components/landing/ExampleChips";
+import { AgentShowcase } from "@/components/landing/AgentShowcase";
+import { HowItWorks } from "@/components/landing/HowItWorks";
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
+    <main className="min-h-screen relative overflow-hidden bg-[#F7F8FC]">
+      {/* Animated Floating Gradient Ambient Blobs */}
+      <div className="absolute top-[-100px] left-[-100px] w-[450px] h-[450px] rounded-full bg-gradient-to-tr from-violet-200/40 via-purple-300/30 to-indigo-200/20 blur-3xl animate-blob pointer-events-none" />
+      <div className="absolute top-[20%] right-[-120px] w-[500px] h-[500px] rounded-full bg-gradient-to-br from-sky-200/40 via-blue-200/30 to-teal-200/20 blur-3xl animate-blob animation-delay-2000 pointer-events-none" />
+      <div className="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-rose-200/30 via-pink-200/20 to-amber-200/30 blur-3xl animate-blob animation-delay-4000 pointer-events-none" />
+
+      {/* Navigation Bar */}
+      <header className="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between relative z-10">
+        <Link href="/" className="flex items-center gap-2.5 group">
+          <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:scale-105 transition-transform">
+            <Bot className="w-5 h-5" />
+          </div>
+          <div className="flex flex-col">
+            <span className="font-extrabold text-lg text-slate-900 tracking-tight leading-none">CouncilAI</span>
+            <span className="text-[10px] font-bold text-violet-600 uppercase tracking-widest mt-0.5">
+              Multi-Agent Boardroom
+            </span>
+          </div>
+        </Link>
+
+        <div className="flex items-center gap-3">
           <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
+            href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
+            className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md border border-slate-200/80 hover:bg-white text-slate-700 text-xs font-semibold shadow-xs transition-all"
           >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
+            <Code2 className="w-4 h-4" />
+            <span>Star on GitHub</span>
           </a>
         </div>
-      </main>
-    </div>
+      </header>
+
+      {/* Landing Page Content */}
+      <div className="relative z-10">
+        <Hero />
+        <ExampleChips />
+        <AgentShowcase />
+        <HowItWorks />
+      </div>
+
+      {/* Footer */}
+      <footer className="w-full border-t border-slate-200/60 py-8 text-center text-xs text-slate-500 relative z-10">
+        <p>© 2026 CouncilAI &bull; Powered by Google Gemini 1.5 Flash Multi-Agent Framework</p>
+      </footer>
+    </main>
   );
 }
