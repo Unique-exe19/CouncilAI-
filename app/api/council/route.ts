@@ -5,14 +5,35 @@ import { DEMO_SCRIPTS } from "@/lib/demoScript";
 export const runtime = "nodejs";
 
 export async function POST(req: NextRequest) {
-  const { decision, demoMode } = await req.json();
-
-  if (!decision || typeof decision !== "string") {
-    return new Response(JSON.stringify({ error: "Decision string is required." }), {
+  let body: { decision?: string; demoMode?: boolean } = {};
+  try {
+    body = await req.json();
+  } catch {
+    return new Response(JSON.stringify({ error: "Invalid JSON request body." }), {
       status: 400,
       headers: { "Content-Type": "application/json" },
     });
   }
+
+  const rawDecision = body.decision;
+  const demoMode = body.demoMode;
+
+  if (!rawDecision || typeof rawDecision !== "string" || rawDecision.trim().length < 3) {
+    return new Response(JSON.stringify({ error: "Decision string is required and must be at least 3 characters." }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  if (rawDecision.length > 1000) {
+    return new Response(JSON.stringify({ error: "Decision string exceeds maximum length of 1000 characters." }), {
+      status: 400,
+      headers: { "Content-Type": "application/json" },
+    });
+  }
+
+  // Sanitize decision string to eliminate dangerous script tags or control characters
+  const decision = rawDecision.replace(/<[^>]*>?/gm, "").trim();
 
   const keysString = `${process.env.GEMINI_API_KEYS || ""},${process.env.GEMINI_API_KEY || ""}`;
   const validKeys = keysString.split(",").map((k) => k.trim()).filter((k) => k.length > 5);

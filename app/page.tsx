@@ -18,8 +18,8 @@ export default function HomePage() {
       <div className="absolute bottom-[10%] left-[20%] w-[400px] h-[400px] rounded-full bg-gradient-to-tr from-rose-200/30 via-pink-200/20 to-amber-200/30 blur-3xl animate-blob animation-delay-4000 pointer-events-none" />
 
       {/* Navigation Bar */}
-      <header className="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between relative z-10">
-        <Link href="/" className="flex items-center gap-2.5 group">
+      <header className="w-full max-w-6xl mx-auto px-4 py-6 flex items-center justify-between relative z-10" aria-label="Main Navigation">
+        <Link href="/" aria-label="CouncilAI Home Page" className="flex items-center gap-2.5 group">
           <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-violet-600 to-indigo-600 text-white flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:scale-105 transition-transform">
             <Bot className="w-5 h-5" />
           </div>
@@ -33,9 +33,10 @@ export default function HomePage() {
 
         <div className="flex items-center gap-3">
           <a
-            href="https://github.com"
+            href="https://github.com/Unique-exe19/CouncilAI-.git"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="View source code on GitHub"
             className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/70 backdrop-blur-md border border-slate-200/80 hover:bg-white text-slate-700 text-xs font-semibold shadow-xs transition-all"
           >
             <Code2 className="w-4 h-4" />

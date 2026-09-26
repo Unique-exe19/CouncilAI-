@@ -1,32 +1,41 @@
 # 🏛️ CouncilAI — Multi-Agent Executive Decision Simulator
 
-**CouncilAI** is a production-quality, demo-ready Next.js application that spawns a board of 4 specialized AI executives (**CEO**, **CFO**, **CTO**, **CMO**) to debate strategic business dilemmas live in a chat interface, followed by a Boardroom Moderator synthesizing a structured **Executive Consensus Report**.
+> **AI for Strategic Governance & Executive Decision Assistance**  
+> *Transforming high-stakes corporate deliberation into 60 seconds of AI boardroom clarity.*
 
 ---
 
-## 🌟 Key Features
+## 🎯 Problem Statement
+Founders, CEOs, and executive leaders face complex, high-stakes decisions every day—such as pivoting pricing models, scaling infrastructure, expanding to new markets, or altering business strategies. 
 
-* **Multi-Agent Boardroom Debate:**
-  * 👑 **Victoria Vance (CEO):** Growth, category dominance, long-term vision.
-  * 💰 **Arthur Sterling (CFO):** Unit economics, cash burn, risk mitigation, payback metrics.
-  * ⚡ **Dr. Elena Rostova (CTO):** System architecture, tech debt, security, engineering bandwidth.
-  * 📢 **Marcus Thorne (CMO):** User acquisition, retention, branding, viral loops.
-* **3-Round Structured Debate Loop:**
-  * **Round 1 — Opening Pitches:** Each agent introduces their strategic stance.
-  * **Round 2 — Rebuttals:** Agents directly challenge each other's points by name.
-  * **Round 3 — Final Stances:** Explicit verdict stances (Support / Oppose / Conditional).
-* **Synthesized Executive Report:**
-  * **Verdict Badge:** Go / No-Go / Conditional Go with an animated Confidence Meter (0-100%).
-  * **Pros vs Cons:** Side-by-side comparative analysis.
-  * **Risk Assessment Matrix:** Identifies risks, severity levels (High/Med/Low), and mitigation strategies.
-  * **Kanban Action Items:** Tasks assigned to executive owners with timelines and priorities.
-  * **Export Options:** 1-Click Copy Markdown & Print/Export PDF formatted reports.
-* **Instant Demo Mode:**
-  * Built-in toggle for zero-latency scripted replays, ideal for 60-second video recordings or offline demos without API key limits.
+However, consulting human executive boards (CEOs, CFOs, CTOs, CMOs) or external management consultants is **prohibitively expensive**, **slow** (taking weeks of deliberation), and prone to cognitive bias. Existing AI tools provide generic single-prompt responses that lack domain-specific pushback, multi-perspective debate, or structured consensus.
 
 ---
 
-## 📐 Multi-Agent Architecture
+## 💡 Proposed Solution & Innovation
+**CouncilAI** solves this problem by deploying an autonomous **Multi-Agent C-Suite Boardroom**:
+* 👑 **Victoria Vance (CEO):** Category dominance, aggressive market share expansion, and vision.
+* 💰 **Arthur Sterling (CFO):** Capital efficiency, cash burn, risk mitigation, and mandatory unit economics math chains $(\text{signups} \times \text{conversion} \times \text{price})$.
+* ⚡ **Dr. Elena Rostova (CTO):** System architecture, technical debt, developer bandwidth, and security.
+* 📢 **Marcus Thorne (CMO):** Customer perception, viral loops, NPS, and retention.
+* 🏛️ **Boardroom Moderator:** Neutral synthesizer generating structured executive consensus reports.
+
+---
+
+## ⚖️ The 5 Implemented Boardroom Debate Rules
+
+CouncilAI enforces strict behavioral guardrails across all 3 debate rounds:
+1. **Original Proposal Stance (Round 3):** Every executive MUST declare their verdict (**Support / Oppose / Conditional**) on the *original proposal* first before offering any alternative compromise.
+2. **Data-Driven Concessions:** Agents will **never** concede or alter positions unless presented with new empirical data, explicitly naming who and what changed their mind.
+3. **Metric Assumption Labeling:** All unverified numbers, percentages, or dollar metrics cited by agents are transparently tagged with `(assumption)` and kept internally consistent across turns.
+4. **CFO Mandatory Math Chain:** The CFO MUST state the explicit math chain ($\text{signups} \times \text{conversion} \times \text{price}$) before concluding.
+5. **Guaranteed Round 3 Dissent:** At least one executive maintains an **Oppose** or **Conditional** stance in Round 3 to prevent uncritical groupthink.
+
+---
+
+## 🤖 Generative AI Architecture & Integration
+
+CouncilAI is powered by the **Google Gemini API** (`@google/generative-ai` & `@google/genai` SDKs):
 
 ```mermaid
 sequenceDiagram
@@ -35,17 +44,17 @@ sequenceDiagram
     participant UI as Next.js Client UI (Council Room)
     participant Route as SSE Route Handler (/api/council)
     participant Orch as Multi-Agent Orchestrator
-    participant Gemini as Google Gemini 1.5 Flash API
+    participant Gemini as Google Gemini 3.5 & 3.6 Flash API
 
-    User->>UI: Inputs dilemma (e.g. "Freemium vs Paid Trial")
+    User->>UI: Submits Strategic Dilemma
     UI->>Route: POST /api/council (decision, demoMode)
     
     loop Round 1 to 3 (CEO → CFO → CTO → CMO)
         Route->>Orch: generateAgentTurnStream(agentId, round, transcript)
-        Orch->>Gemini: Stream prompt with personality & shared transcript
-        Gemini-->>Orch: Stream token chunks
+        Orch->>Gemini: Stream prompt with persona & transcript history
+        Gemini-->>Orch: Real-time token chunks
         Orch-->>Route: SSE token events
-        Route-->>UI: Real-time typing stream (agent_start, token, agent_end)
+        Route-->>UI: Live streaming debate (agent_start, token, agent_end)
     end
 
     Route->>Orch: generateExecutiveReport(decision, fullTranscript)
@@ -57,27 +66,47 @@ sequenceDiagram
 
 ---
 
+## 🔒 Security, Safety & Privacy
+
+CouncilAI implements defense-in-depth security:
+* **Enterprise Security Headers:** Configured in `next.config.ts` (`Strict-Transport-Security`, `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `X-XSS-Protection`, `Permissions-Policy`).
+* **Input Sanitization & Length Caps:** API endpoint `/api/council` sanitizes HTML/script tags and enforces strict 3–1000 character length boundaries.
+* **API Key Protection:** Zero hardcoded API keys; keys are managed via server-side environment variables (`GEMINI_API_KEYS`).
+* **Resilient Key Rotation & Failover:** Middleware automatically rotates keys and falls back across candidate models (`gemini-3.5-flash`, `gemini-3.6-flash`) with seamless zero-crash demo mode fallbacks.
+
+---
+
+## 🧪 Testing & Quality Assurance
+
+Comprehensive unit and integration test suite powered by **Vitest**:
+```bash
+# Run automated test suite
+npm test
+```
+* `__tests__/schema.test.ts`: Zod schema validation for Executive Report.
+* `__tests__/agents.test.ts`: Agent system prompts & mandatory debate rule integrity.
+* `__tests__/demoScript.test.ts`: Replay message consistency & round structure.
+* `__tests__/utils.test.ts`: Utility styling merge function.
+
+---
+
 ## 🚀 Quickstart & Setup
 
 ### Prerequisites
-* Node.js v18+ 
+* Node.js v18+
 * npm / pnpm / yarn
 
 ### 1. Installation
 ```bash
-# Install dependencies
 npm install
 ```
 
 ### 2. Environment Configuration
-Create a `.env.local` file in the root directory:
+Create a `.env.local` file:
 ```env
-# Optional: Add your Google Gemini API Key from https://aistudio.google.com/
 GEMINI_API_KEY=your_gemini_api_key_here
-GEMINI_MODEL=gemini-1.5-flash
+GEMINI_MODEL=gemini-3.5-flash
 ```
-
-*(Note: If `GEMINI_API_KEY` is omitted, CouncilAI automatically defaults to **Demo Mode**, replaying a high-fidelity pre-scripted boardroom debate).*
 
 ### 3. Run Development Server
 ```bash
@@ -87,21 +116,13 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 
 ---
 
-## 📦 Repository Size Compliance (< 10 MB Limit)
-
-This repository strictly adheres to hackathon submission guidelines:
-* Strict `.gitignore` excludes `node_modules/`, `.next/`, build artifacts, and environment files.
-* Zero binary media assets or heavy model weights committed.
-* **Total Git Repository Size:** `< 1 MB`.
-
----
-
 ## 🛠️ Tech Stack
 
 * **Framework:** Next.js 16 (App Router) + TypeScript
-* **Styling:** Tailwind CSS + Custom Glassmorphism System
+* **Styling:** Tailwind CSS + Custom Glassmorphism System (Light Theme)
 * **Animations:** Framer Motion
-* **AI Orchestration:** Google Generative AI SDK (`@google/generative-ai` & `@google/genai`)
+* **AI Engine:** Google Gemini API (`gemini-3.5-flash`, `gemini-3.6-flash`)
 * **State Management:** Zustand
 * **Schema Validation:** Zod
+* **Test Runner:** Vitest
 * **Icons & Rendering:** Lucide React, React Markdown
